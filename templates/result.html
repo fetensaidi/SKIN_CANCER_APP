@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>SkinAI - Résultat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .navbar {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 15px 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .brand-icon {
+            width: 38px; height: 38px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .brand-icon i { color: white; font-size: 16px; }
+        .brand-name { color: white; font-size: 20px; font-weight: 800; }
+        .container {
+            padding: 40px 35px;
+            max-width: 750px;
+            margin: auto;
+        }
+        .result-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            overflow: hidden;
+        }
+        /* Header couleur selon résultat */
+        .result-header {
+            padding: 35px;
+            text-align: center;
+            position: relative;
+        }
+        .result-header.malignant {
+            background: linear-gradient(135deg, rgba(235,51,73,0.3), rgba(244,92,67,0.2));
+            border-bottom: 1px solid rgba(235,51,73,0.3);
+        }
+        .result-header.benign {
+            background: linear-gradient(135deg, rgba(17,153,142,0.3), rgba(56,239,125,0.2));
+            border-bottom: 1px solid rgba(56,239,125,0.3);
+        }
+        .result-icon {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 35px; margin: 0 auto 18px;
+        }
+        .result-icon.malignant { background: linear-gradient(135deg, #eb3349, #f45c43); }
+        .result-icon.benign    { background: linear-gradient(135deg, #11998e, #38ef7d); }
+        .result-title { font-size: 30px; font-weight: 800; margin-bottom: 6px; }
+        .malignant-text { color: #f45c43; }
+        .benign-text    { color: #38ef7d; }
+        /* Body */
+        .result-body { padding: 30px 35px; }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .info-box {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 18px;
+        }
+        .info-box label {
+            color: rgba(255,255,255,0.45);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 6px;
+        }
+        .info-box span {
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .progress-container { margin-bottom: 25px; }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .progress-label span {
+            color: rgba(255,255,255,0.6);
+            font-size: 13px;
+        }
+        .progress-label strong { color: white; font-size: 13px; }
+        .progress-bar-bg {
+            background: rgba(255,255,255,0.1);
+            border-radius: 50px;
+            height: 10px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 50px;
+        }
+        .progress-bar-fill.malignant { background: linear-gradient(135deg, #eb3349, #f45c43); }
+        .progress-bar-fill.benign    { background: linear-gradient(135deg, #11998e, #38ef7d); }
+        /* Image */
+        .image-section { text-align: center; margin-bottom: 25px; }
+        .image-section label {
+            color: rgba(255,255,255,0.5);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 12px;
+        }
+        .patient-img {
+            width: 220px; height: 220px;
+            object-fit: cover;
+            border-radius: 16px;
+            border: 3px solid rgba(255,255,255,0.1);
+        }
+        /* Conseil */
+        .conseil-box {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-left: 4px solid #667eea;
+            border-radius: 14px;
+            padding: 18px 20px;
+            margin-bottom: 25px;
+        }
+        .conseil-box p {
+            color: rgba(255,255,255,0.75);
+            font-size: 13px;
+            line-height: 1.7;
+            margin: 0;
+        }
+        /* Boutons */
+        .btn-group-custom {
+            display: flex;
+            gap: 12px;
+        }
+        .btn-custom {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-print {
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            color: #1a1a1a;
+        }
+        .btn-print:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(247,151,30,0.4);
+            color: #1a1a1a;
+        }
+        .btn-home {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        .btn-home:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102,126,234,0.4);
+            color: white;
+        }
+        .btn-new {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: #1a1a1a;
+        }
+        .btn-new:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(56,239,125,0.3);
+            color: #1a1a1a;
+        }
+
+        /* ══ IMPRESSION ══ */
+        @media print {
+            body { background: white !important; }
+            .navbar, .btn-group-custom { display: none !important; }
+            .result-card {
+                background: white !important;
+                border: 2px solid #ddd !important;
+                box-shadow: none !important;
+            }
+            .result-header.malignant { background: #ffe0e0 !important; }
+            .result-header.benign    { background: #e0fff4 !important; }
+            .result-title  { color: #333 !important; }
+            .malignant-text { color: #e74c3c !important; }
+            .benign-text    { color: #27ae60 !important; }
+            .info-box {
+                background: #f8f8f8 !important;
+                border: 1px solid #ddd !important;
+            }
+            .info-box label { color: #666 !important; }
+            .info-box span  { color: #333 !important; }
+            .conseil-box {
+                background: #f0f4ff !important;
+                border-left-color: #667eea !important;
+            }
+            .conseil-box p { color: #333 !important; }
+            .progress-bar-bg { background: #eee !important; }
+            .progress-label span, .progress-label strong { color: #333 !important; }
+            .print-header {
+                display: block !important;
+                text-align: center;
+                margin-bottom: 20px;
+                padding: 15px;
+                border-bottom: 2px solid #667eea;
+            }
+            .image-section label { color: #666 !important; }
+        }
+        .print-header { display: none; }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <a class="navbar-brand" href="/dashboard">
+        <div class="brand-icon"><i class="fas fa-heartbeat"></i></div>
+        <div>
+            <div class="brand-name">SkinAI</div>
+        </div>
+    </a>
+</nav>
+
+<div class="container">
+    <div class="result-card">
+
+        <!-- En-tête imprimable -->
+        <div class="print-header">
+            <h2 style="color:#333; font-size:22px; font-weight:800;">
+                🧬 SkinAI — Rapport de Diagnostic
+            </h2>
+            <p style="color:#666; font-size:13px; margin-top:5px;">
+                Date : <script>document.write(new Date().toLocaleDateString('fr-FR'))</script>
+            </p>
+        </div>
+
+        <!-- Header résultat -->
+        <div class="result-header {% if result == 'Malignant' %}malignant{% else %}benign{% endif %}">
+            <div class="result-icon {% if result == 'Malignant' %}malignant{% else %}benign{% endif %}">
+                {% if result == 'Malignant' %}
+                <i class="fas fa-exclamation-triangle" style="color:white;"></i>
+                {% else %}
+                <i class="fas fa-check" style="color:white;"></i>
+                {% endif %}
+            </div>
+            <div class="result-title {% if result == 'Malignant' %}malignant-text{% else %}benign-text{% endif %}">
+                {% if result == 'Malignant' %}⚠️ Malignant{% else %}✅ Bénin{% endif %}
+            </div>
+            <p style="color:rgba(255,255,255,0.6); font-size:14px; margin-top:5px;">
+                Résultat de l'analyse par Intelligence Artificielle
+            </p>
+        </div>
+
+        <!-- Body -->
+        <div class="result-body">
+
+            <!-- Infos -->
+            <div class="info-grid">
+                <div class="info-box">
+                    <label><i class="fas fa-diagnoses me-1"></i> Diagnostic</label>
+                    <span class="{% if result == 'Malignant' %}malignant-text{% else %}benign-text{% endif %}">
+                        {{ result }}
+                    </span>
+                </div>
+                <div class="info-box">
+                    <label><i class="fas fa-percentage me-1"></i> Taux de Confiance</label>
+                    <span>{{ prob }}%</span>
+                </div>
+                <div class="info-box">
+                    <label><i class="fas fa-calendar me-1"></i> Date d'Analyse</label>
+                    <span style="font-size:14px;" id="date-analyse"></span>
+                </div>
+                <div class="info-box">
+                    <label><i class="fas fa-robot me-1"></i> Modèle IA</label>
+                    <span style="font-size:14px;">VGG16</span>
+                </div>
+            </div>
+
+            <!-- Barre de confiance -->
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Score de confiance IA</span>
+                    <strong>{{ prob }}%</strong>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill {% if result == 'Malignant' %}malignant{% else %}benign{% endif %}"
+                         style="width: {{ prob }}%">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Image -->
+            <div class="image-section">
+                <label><i class="fas fa-image me-1"></i> Image Analysée</label>
+                <img src="{{ img }}" class="patient-img" alt="Lésion analysée">
+            </div>
+
+            <!-- Conseil médical -->
+            <div class="conseil-box">
+                {% if result == 'Malignant' %}
+                <p>
+                    <i class="fas fa-exclamation-circle me-2" style="color:#f45c43;"></i>
+                    <b style="color:white;">Recommandation :</b>
+                    Ce résultat indique une lésion potentiellement maligne.
+                    Nous vous recommandons fortement de consulter un dermatologue
+                    ou un oncologue dans les plus brefs délais pour une confirmation
+                    et une prise en charge appropriée. <b style="color:white;">
+                    Vous n'êtes pas seul, l'espoir existe !</b>
+                </p>
+                {% else %}
+                <p>
+                    <i class="fas fa-check-circle me-2" style="color:#38ef7d;"></i>
+                    <b style="color:white;">Bonne nouvelle !</b>
+                    La lésion analysée semble bénigne. Continuez à surveiller
+                    votre peau régulièrement et consultez un dermatologue
+                    pour un suivi annuel. Protégez votre peau du soleil
+                    et prenez soin de vous ! 💚
+                </p>
+                {% endif %}
+            </div>
+
+            <!-- Boutons -->
+            <div class="btn-group-custom">
+                <button class="btn-custom btn-print" onclick="imprimerResultat()">
+                    <i class="fas fa-print"></i> Imprimer le Rapport
+                </button>
+                <a href="/predict" class="btn-custom btn-new">
+                    <i class="fas fa-plus"></i> Nouvelle Analyse
+                </a>
+                <a href="/dashboard" class="btn-custom btn-home">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+// Date automatique
+const now = new Date();
+document.getElementById('date-analyse').textContent =
+    now.toLocaleDateString('fr-FR') + ' à ' + now.toLocaleTimeString('fr-FR');
+
+// Impression
+function imprimerResultat() {
+    window.print();
+}
+</script>
+</body>
+</html>

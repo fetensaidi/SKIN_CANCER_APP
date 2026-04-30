@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>SkinAI - Analyse</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .navbar {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar-brand {
+            color: white;
+            font-size: 22px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+        .navbar-brand i {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-right: 8px;
+        }
+        .back-btn {
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+        .back-btn:hover { color: white; }
+        .container { padding: 50px 30px; max-width: 600px; margin: auto; }
+        .page-title { color: white; margin-bottom: 35px; }
+        .page-title h2 { font-size: 28px; font-weight: 700; }
+        .page-title p { color: rgba(255,255,255,0.5); margin-top: 5px; }
+        .form-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 40px;
+        }
+        .form-group { margin-bottom: 25px; }
+        label {
+            color: rgba(255,255,255,0.7);
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .form-control {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            color: white;
+            padding: 14px;
+            width: 100%;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+        .form-control:focus {
+            background: rgba(255,255,255,0.12);
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.2);
+            color: white;
+        }
+        .form-control::placeholder { color: rgba(255,255,255,0.3); }
+        .file-upload {
+            background: rgba(255,255,255,0.07);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .file-upload:hover {
+            border-color: #667eea;
+            background: rgba(102,126,234,0.1);
+        }
+        .file-upload i { font-size: 40px; color: rgba(255,255,255,0.3); margin-bottom: 10px; }
+        .file-upload p { color: rgba(255,255,255,0.4); font-size: 14px; }
+        .file-upload input { display: none; }
+        .btn-analyse {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        .btn-analyse:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102,126,234,0.4);
+        }
+        .alert { border-radius: 12px; border: none; margin-bottom: 20px; }
+        #preview { max-width: 100%; border-radius: 12px; margin-top: 15px; display: none; }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <a class="navbar-brand" href="/dashboard">
+        <i class="fas fa-dna"></i>SkinAI
+    </a>
+    <a href="/dashboard" class="back-btn">
+        <i class="fas fa-arrow-left me-2"></i>Retour
+    </a>
+</nav>
+
+<div class="container">
+    <div class="page-title">
+        <h2><i class="fas fa-microscope me-2"></i>Nouvelle Analyse</h2>
+        <p>Renseignez les informations du patient et uploadez l'image</p>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in messages %}
+    <div class="alert alert-{{cat}}">{{msg}}</div>
+    {% endfor %}
+    {% endwith %}
+
+    <div class="form-card">
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label><i class="fas fa-user me-2"></i>Nom du patient</label>
+                <input class="form-control" type="text" name="name" placeholder="Ex: Ahmed Ben Ali" required>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-birthday-cake me-2"></i>Âge</label>
+                <input class="form-control" type="number" name="age" placeholder="Ex: 45" required>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-image me-2"></i>Image de la lésion</label>
+                <div class="file-upload" onclick="document.getElementById('imgInput').click()">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Cliquez pour choisir une image</p>
+                    <p style="font-size:12px; margin-top:5px;">JPG, PNG acceptés</p>
+                    <input id="imgInput" type="file" name="image" accept="image/*"
+                           onchange="previewImage(this)" required>
+                </div>
+                <img id="preview" src="" alt="Aperçu">
+            </div>
+            <button class="btn-analyse" type="submit">
+                <i class="fas fa-search me-2"></i>Lancer l'analyse IA
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+function previewImage(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = e => {
+            const preview = document.getElementById('preview');
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
+</body>
+</html>

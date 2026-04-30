@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>SkinAI - Patients</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .navbar {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar-brand {
+            color: white;
+            font-size: 22px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+        .navbar-brand i {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-right: 8px;
+        }
+        .back-btn {
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .back-btn:hover { color: white; }
+        .container { padding: 50px 30px; max-width: 1100px; margin: auto; }
+        .page-title { color: white; margin-bottom: 35px; }
+        .page-title h2 { font-size: 28px; font-weight: 700; }
+        .page-title p { color: rgba(255,255,255,0.5); margin-top: 5px; }
+        .table-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            overflow: hidden;
+        }
+        table { width: 100%; border-collapse: collapse; }
+        thead {
+            background: rgba(102,126,234,0.2);
+        }
+        thead th {
+            color: rgba(255,255,255,0.7);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 18px 20px;
+            font-weight: 600;
+        }
+        tbody tr {
+            border-top: 1px solid rgba(255,255,255,0.05);
+            transition: background 0.2s;
+        }
+        tbody tr:hover { background: rgba(255,255,255,0.05); }
+        tbody td {
+            color: rgba(255,255,255,0.8);
+            padding: 15px 20px;
+            font-size: 14px;
+            vertical-align: middle;
+        }
+        .badge-malignant {
+            background: rgba(244,92,67,0.2);
+            color: #f45c43;
+            border: 1px solid rgba(244,92,67,0.3);
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-benign {
+            background: rgba(56,239,125,0.2);
+            color: #38ef7d;
+            border: 1px solid rgba(56,239,125,0.3);
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .patient-thumb {
+            width: 55px;
+            height: 55px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px;
+            color: rgba(255,255,255,0.3);
+        }
+        .empty-state i { font-size: 50px; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <a class="navbar-brand" href="/dashboard">
+        <i class="fas fa-dna"></i>SkinAI
+    </a>
+    <a href="/dashboard" class="back-btn">
+        <i class="fas fa-arrow-left me-2"></i>Retour
+    </a>
+</nav>
+
+<div class="container">
+    <div class="page-title">
+        <h2><i class="fas fa-users me-2"></i>Historique des Patients</h2>
+        <p>Liste de tous les diagnostics enregistrés</p>
+    </div>
+
+    <div class="table-card">
+        {% if patients %}
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nom</th>
+                    <th>Âge</th>
+                    <th>Diagnostic</th>
+                    <th>Confiance</th>
+                    <th>Image</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in patients %}
+                <tr>
+                    <td style="color:rgba(255,255,255,0.3)">{{ loop.index }}</td>
+                    <td><b>{{ p.name }}</b></td>
+                    <td>{{ p.age }} ans</td>
+                    <td>
+                        {% if p.result == 'Malignant' %}
+                        <span class="badge-malignant"><i class="fas fa-exclamation-circle me-1"></i>{{ p.result }}</span>
+                        {% else %}
+                        <span class="badge-benign"><i class="fas fa-check-circle me-1"></i>{{ p.result }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ (p.probability * 100) | round(2) }}%</td>
+                    <td><img src="{{ p.image_path }}" class="patient-thumb"></td>
+                    <td style="color:rgba(255,255,255,0.4); font-size:12px">{{ p.created_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-inbox"></i>
+            <p>Aucun patient enregistré pour le moment</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+</body>
+</html>

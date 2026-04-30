@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>SkinAI - Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .wrapper {
+            display: flex;
+            width: 850px;
+            min-height: 500px;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+        }
+        /* ── GAUCHE ── */
+        .left-panel {
+            flex: 0.9;
+            background: linear-gradient(160deg, #1a6b4a, #2ecc71, #1a6b4a);
+            padding: 30px 28px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .left-panel::before {
+            content: '';
+            position: absolute;
+            top: -60px; right: -60px;
+            width: 180px; height: 180px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+        .left-panel::after {
+            content: '';
+            position: absolute;
+            bottom: -50px; left: -50px;
+            width: 150px; height: 150px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+        /* ── DROITE ── */
+        .right-panel {
+            flex: 1;
+            background: rgba(15,12,41,0.97);
+            border-left: 1px solid rgba(255,255,255,0.1);
+            padding: 40px 35px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .logo i {
+            font-size: 38px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .logo h1 {
+            color: white;
+            font-size: 22px;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+        .logo p {
+            color: rgba(255,255,255,0.5);
+            font-size: 12px;
+            margin-top: 4px;
+        }
+        .form-group {
+            margin-bottom: 16px;
+            position: relative;
+        }
+        .icon-left {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.4);
+            z-index: 10;
+            font-size: 14px;
+        }
+        .form-control {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            color: white;
+            padding: 13px 13px 13px 42px;
+            width: 100%;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .form-control:focus {
+            background: rgba(255,255,255,0.12);
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.2);
+            color: white;
+        }
+        .form-control::placeholder { color: rgba(255,255,255,0.3); }
+        .icon-right {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.4);
+            cursor: pointer;
+            z-index: 10;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+        .icon-right:hover { color: white; }
+        .btn-login {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 8px;
+        }
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102,126,234,0.4);
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 16px;
+            color: rgba(255,255,255,0.4);
+            font-size: 13px;
+        }
+        .login-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .login-link a:hover { text-decoration: underline; }
+        .alert {
+            border-radius: 12px;
+            border: none;
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+        .quote-box {
+            background: rgba(255,255,255,0.12);
+            border-left: 3px solid rgba(255,255,255,0.6);
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+        .quote-box:hover {
+            background: rgba(255,255,255,0.18);
+            transform: translateX(4px);
+        }
+        .quote-box p {
+            color: white;
+            font-size: 12px;
+            font-style: italic;
+            line-height: 1.6;
+            margin: 0;
+        }
+        .quote-box span {
+            color: rgba(255,255,255,0.6);
+            font-size: 10px;
+            margin-top: 5px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+
+    <!-- ══════════════ GAUCHE ══════════════ -->
+    <div class="left-panel">
+
+        <!-- Logo -->
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
+            <div style="width:40px; height:40px; background:rgba(255,255,255,0.2);
+                        border-radius:12px; display:flex; align-items:center;
+                        justify-content:center;">
+                <i class="fas fa-heartbeat" style="color:white; font-size:18px;"></i>
+            </div>
+            <div>
+                <div style="color:white; font-size:18px; font-weight:800;">SkinAI</div>
+                <div style="color:rgba(255,255,255,0.7); font-size:10px;">Santé & Espoir</div>
+            </div>
+        </div>
+
+        <!-- Badge -->
+        <div style="display:inline-block; background:rgba(255,255,255,0.15);
+                    border-radius:50px; padding:5px 13px; margin-bottom:12px;">
+            <span style="color:white; font-size:10px; font-weight:600;
+                         text-transform:uppercase; letter-spacing:1px;">
+                <i class="fas fa-shield-alt me-1"></i> Plateforme Médicale Certifiée
+            </span>
+        </div>
+
+        <!-- Titre -->
+        <h2 style="color:white; font-size:20px; font-weight:800;
+                   line-height:1.4; margin-bottom:10px;">
+            🌿 Votre santé,<br>notre priorité absolue
+        </h2>
+        <p style="color:rgba(255,255,255,0.8); font-size:12px;
+                  line-height:1.7; margin-bottom:16px;">
+            La détection précoce sauve des vies. Ensemble,
+            nous combattons la maladie avec espoir et courage.
+        </p>
+
+        <!-- Séparateur -->
+        <div style="height:1px; background:rgba(255,255,255,0.2); margin-bottom:14px;"></div>
+
+        <!-- Citations -->
+        <div class="quote-box">
+            <p>
+                <i class="fas fa-quote-left" style="font-size:9px; margin-right:5px; opacity:0.7;"></i>
+                Le diagnostic précoce est la clé de la guérison.
+                Chaque examen peut sauver une vie précieuse.
+            </p>
+            <span><i class="fas fa-ribbon me-1"></i> Sensibilisation au cancer cutané</span>
+        </div>
+
+        <div class="quote-box">
+            <p>
+                <i class="fas fa-quote-left" style="font-size:9px; margin-right:5px; opacity:0.7;"></i>
+                Vous êtes plus forts que vous ne le pensez.
+                Chaque jour est une nouvelle victoire.
+            </p>
+            <span><i class="fas fa-heart me-1"></i> Message d'espoir aux patients</span>
+        </div>
+
+        <div class="quote-box">
+            <p>
+                <i class="fas fa-quote-left" style="font-size:9px; margin-right:5px; opacity:0.7;"></i>
+                Prendre soin de sa peau aujourd'hui,
+                c'est investir dans sa vie de demain.
+            </p>
+            <span><i class="fas fa-leaf me-1"></i> Conseil dermatologique</span>
+        </div>
+
+        <!-- Séparateur -->
+        <div style="height:1px; background:rgba(255,255,255,0.2); margin:14px 0 12px;"></div>
+
+        <!-- Stats -->
+        <div style="display:flex; gap:10px;">
+            <div style="flex:1; text-align:center; background:rgba(255,255,255,0.12);
+                        border-radius:10px; padding:10px 6px;">
+                <div style="color:white; font-size:17px; font-weight:800;">95%</div>
+                <div style="color:rgba(255,255,255,0.7); font-size:9px; margin-top:2px;">
+                    Taux de survie
+                </div>
+            </div>
+            <div style="flex:1; text-align:center; background:rgba(255,255,255,0.12);
+                        border-radius:10px; padding:10px 6px;">
+                <div style="color:white; font-size:17px; font-weight:800;">1/5</div>
+                <div style="color:rgba(255,255,255,0.7); font-size:9px; margin-top:2px;">
+                    Personnes touchées
+                </div>
+            </div>
+            <div style="flex:1; text-align:center; background:rgba(255,255,255,0.12);
+                        border-radius:10px; padding:10px 6px;">
+                <div style="color:white; font-size:17px; font-weight:800;">💪</div>
+                <div style="color:rgba(255,255,255,0.7); font-size:9px; margin-top:2px;">
+                    Ensemble forts
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ══════════════ DROITE ══════════════ -->
+    <div class="right-panel">
+        <div class="logo">
+            <i class="fas fa-dna"></i>
+            <h1>SkinAI</h1>
+            <p>Connectez-vous pour accéder à la plateforme</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for cat, msg in messages %}
+        <div class="alert alert-{{cat}}">{{msg}}</div>
+        {% endfor %}
+        {% endwith %}
+
+        <form method="POST">
+            <div class="form-group">
+                <i class="fas fa-user icon-left"></i>
+                <input class="form-control"
+                       type="text"
+                       name="username"
+                       placeholder="Nom d'utilisateur"
+                       required>
+            </div>
+
+            <div class="form-group">
+                <i class="fas fa-lock icon-left"></i>
+                <input class="form-control"
+                       type="password"
+                       name="password"
+                       id="password"
+                       placeholder="Mot de passe"
+                       required>
+                <i class="fas fa-eye icon-right"
+                   id="togglePassword"
+                   onclick="togglePass()">
+                </i>
+            </div>
+
+            <button class="btn-login" type="submit">
+                <i class="fas fa-sign-in-alt me-2"></i>Se connecter
+            </button>
+        </form>
+
+        <div class="login-link">
+            Pas encore de compte ?
+            <a href="/register">Créer un compte</a>
+        </div>
+
+        <!-- Message bas -->
+        <div style="margin-top:20px; padding:14px;
+                    background:rgba(46,204,113,0.08);
+                    border:1px solid rgba(46,204,113,0.2);
+                    border-radius:12px; text-align:center;">
+            <i class="fas fa-heart" style="color:#2ecc71; font-size:14px;"></i>
+            <p style="color:rgba(255,255,255,0.5); font-size:11px;
+                      margin-top:5px; line-height:1.6;">
+                Dédiée à tous les patients qui se battent
+                chaque jour avec courage et espoir. 💚
+            </p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+function togglePass() {
+    const input = document.getElementById('password');
+    const icon  = document.getElementById('togglePassword');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+}
+</script>
+</body>
+</html>
