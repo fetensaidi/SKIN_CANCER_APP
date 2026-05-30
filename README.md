@@ -14,6 +14,20 @@ les résultats sous forme de statistiques.
 
 ---
 
+## Remarque importante concernant le modèle IA
+
+Le fichier du modèle vgg16_malignant_vs_benign.h5 n'est pas inclus 
+dans ce dépôt GitHub car sa taille dépasse la limite autorisée par 
+GitHub qui est de 100 MB. La taille de ce fichier est de 129 MB.
+
+Pour faire fonctionner l'application, vous devez placer manuellement 
+ce fichier dans le dossier model du projet.
+
+Le modèle a été entraîné sur Google Colab en utilisant le fichier 
+Untitled4.ipynb qui se trouve dans le dossier model de ce dépôt.
+
+---
+
 ## Fonctionnalités
 
 - Connexion et création de compte sécurisés
@@ -81,4 +95,40 @@ Lancer l'application :
 python app.py
 ```
 
-Ouvrir le navigateur et accéder à :
+Ouvrir le navigateur et accéder à :http://localhost:5000/
+---
+
+## Identifiants par défaut
+
+- Nom d'utilisateur : admin
+- Mot de passe : 1234
+
+---
+
+## Structure du projet
+SKIN_CANCER_APP/
+├── model/
+├── static/
+│   ├── uploads/
+│   └── style.css
+├── templates/
+│   ├── login.html
+│   ├── dashboard.html
+│   ├── predict.html
+│   ├── result.html
+│   ├── patients.html
+│   ├── stats.html
+│   ├── profile.html
+│   └── register.html
+├── screenshots/
+├── app.py
+├── database.sql
+└── README.md
+---
+
+## Informations
+
+- Étudiante : Feten Saidi
+- École : ENSTAB
+- Année universitaire : 2025/2026
+- Enseignante : Mme Amira Echtioui
