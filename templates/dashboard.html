@@ -149,7 +149,7 @@
         /* ── ACTIONS GRID ── */
         .actions-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(5, 1fr);
             gap: 18px;
             margin-bottom: 35px;
         }
@@ -268,15 +268,25 @@
         </div>
     </a>
     <div class="nav-right">
-        <div class="nav-user">
-            <i class="fas fa-user-md"></i>
-            <span>{{ session['user'] }}</span>
-        </div>
-        <a href="/logout" class="btn-logout">
-            <i class="fas fa-sign-out-alt me-1"></i>Déconnexion
-        </a>
+    <div class="nav-user">
+        <i class="fas fa-user-md"></i>
+        <span>{{ session['user'] }}</span>
     </div>
-</nav>
+    <a href="/profile" style="
+        background: rgba(102,126,234,0.15);
+        border: 1px solid rgba(102,126,234,0.3);
+        border-radius: 50px;
+        padding: 8px 16px;
+        color: #667eea;
+        font-size: 13px;
+        text-decoration: none;
+        transition: all 0.3s;">
+        <i class="fas fa-user-cog me-1"></i>Profil
+    </a>
+    <a href="/logout" class="btn-logout">
+        <i class="fas fa-sign-out-alt me-1"></i>Déconnexion
+    </a>
+</div>
 
 <!-- ── HERO ── -->
 <div class="hero">
@@ -335,11 +345,29 @@
         </a>
 
         <a href="/logout" class="action-card red">
-            <div class="action-icon red"><i class="fas fa-sign-out-alt"></i></div>
-            <h3>Déconnexion</h3>
-            <p>Fermer votre session de manière sécurisée et protéger vos données</p>
-            <i class="fas fa-arrow-right action-arrow"></i>
-        </a>
+    <div class="action-icon red"><i class="fas fa-sign-out-alt"></i></div>
+    <h3>Déconnexion</h3>
+    <p>Fermer votre session de manière sécurisée et protéger vos données</p>
+    <i class="fas fa-arrow-right action-arrow"></i>
+</a>
+
+<a href="/stats" class="action-card" style="border-top:3px solid #f7971e;">
+    <div class="action-icon" style="background:linear-gradient(135deg,#f7971e,#ffd200);">
+        <i class="fas fa-chart-bar"></i>
+    </div>
+    <h3>Statistiques</h3>
+    <p>Voir les graphiques et statistiques de vos diagnostics</p>
+    <i class="fas fa-arrow-right action-arrow"></i>
+</a>
+
+<a href="/profile" class="action-card" style="border-top:3px solid #667eea;">
+    <div class="action-icon" style="background:linear-gradient(135deg,#667eea,#764ba2);">
+        <i class="fas fa-user-cog"></i>
+    </div>
+    <h3>Mon Profil</h3>
+    <p>Gérer votre compte et changer votre mot de passe</p>
+    <i class="fas fa-arrow-right action-arrow"></i>
+</a>
 
     </div>
 

@@ -67,8 +67,8 @@ def predict():
             pred   = model.predict(img)[0][0]
             result = "Malignant" if pred > 0.5 else "Benign"
             cursor.execute(
-                "INSERT INTO patients (name, age, result, probability, image_path) VALUES (%s,%s,%s,%s,%s)",
-                (name, age, result, float(pred), path)
+                "INSERT INTO patients (name, age, result, probability, image_path, created_by) VALUES (%s,%s,%s,%s,%s,%s)",
+                (name, age, result, float(pred), path, session["user"])
             )
             db.commit()
             flash("Analyse réussie ✓", "success")
@@ -85,7 +85,11 @@ def predict():
 def patients():
     if "user" not in session:
         return redirect("/")
-    cursor.execute("SELECT * FROM patients ORDER BY created_at DESC")
+    user = session["user"]
+    cursor.execute(
+        "SELECT * FROM patients WHERE created_by=%s ORDER BY created_at DESC",
+        (user,)
+    )
     data = cursor.fetchall()
     return render_template("patients.html", patients=data)
 
