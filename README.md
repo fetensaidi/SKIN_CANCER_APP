@@ -57,6 +57,7 @@ Untitled4.ipynb qui se trouve dans le dossier model de ce dépôt.
 ### Résultat du Diagnostic
 ![Résultat 1](screenshots/result_1.png)
 ![Résultat 2](screenshots/result_2.png)
+![Résultat 3](screenshots/result_3.png)
 
 ### Historique des Patients
 ![Patients](screenshots/patients.png)
