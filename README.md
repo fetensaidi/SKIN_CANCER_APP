@@ -46,13 +46,17 @@ Untitled4.ipynb qui se trouve dans le dossier model de ce dépôt.
 ![Login](screenshots/login.png)
 
 ### Tableau de Bord
-![Dashboard](screenshots/dashboard.png)
+![Dashboard 1](screenshots/dashboard_1.png)
+![Dashboard 2](screenshots/dashboard_2.png)
+![Dashboard 3](screenshots/dashboard_3.png)
 
 ### Formulaire d'Analyse
-![Analyse](screenshots/predict.png)
+![Analyse 1](screenshots/predict_1.png)
+![Analyse 2](screenshots/predict_2.png)
 
 ### Résultat du Diagnostic
-![Résultat](screenshots/result.png)
+![Résultat 1](screenshots/result_1.png)
+![Résultat 2](screenshots/result_2.png)
 
 ### Historique des Patients
 ![Patients](screenshots/patients.png)
